@@ -35,6 +35,9 @@ app.get('/secured.html', authMiddleWare, function(req, res) {
     res.sendFile(__dirname + '/secured.html')
 })
 
+// Указываем из какой папки брать статические файлы, например стили или скрипты 
+app.use(express.static('public'))
+
 // Запуск сервера который будет слушать запросы на 3000 порту
 app.listen(3000, () => {
     console.log('Сервер запущен на порту 3000')
