@@ -2,6 +2,16 @@
 const express = require('express')
 const basicAuth = require('basic-auth')
 const app = express()
+const pg = require('pg')
+
+// Выполняем подключение к базе данных
+const pool = new pg.Pool({
+    user: 'postgres',
+    password: 'adminroot',
+    host: 'localhost',
+    port: 5432,
+    database: 'basicAuth'
+})
 
 // Функция для проверки логина и пароля
 function checkUser(username, password) {
