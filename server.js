@@ -1,10 +1,9 @@
-// Подключаем все необходимые пакеты
 const express = require('express')
 const basicAuth = require('basic-auth')
 const app = express()
 const pg = require('pg')
 
-// Выполняем подключение к базе данных
+// Connection to the database
 const pool = new pg.Pool({
     user: 'postgres',
     password: 'adminroot',
@@ -13,7 +12,7 @@ const pool = new pg.Pool({
     database: 'basicAuth'
 })
 
-// Функция для проверки логина и пароля
+// Function that checks login and password
 function checkUser(username, password) {
     if (username === 'dhelfy' && password === 'pass1235') {
         return true
@@ -22,12 +21,12 @@ function checkUser(username, password) {
     }
 }
 
-// Middleware для авторизации
+// authentication middleware
 function authMiddleWare(req, res, next) {
-    // Создаем переменную куда положим реквизиты для входа из запроса
+    // Create variable for saving credentials from request
     let credentials = basicAuth(req)
 
-    // Проверяем запрос на заполненность и проверяем реквизиты с помощью функции checkUser
+    // Check request for emptiness and check credentials with checkUser() function
     if (!credentials || !checkUser(credentials.name, credentials.pass)) {
         res.setHeader('WWW-Authenticate', 'Basic realm="This page requires authentication"')
         res.status(401).send('Anauthorized')
@@ -36,7 +35,7 @@ function authMiddleWare(req, res, next) {
     }
 }
 
-// Два обработчика запросов на два url
+// request handlers
 app.get('/index.html', function(req, res) {
     res.sendFile(__dirname + '/index.html')
 })
@@ -45,10 +44,14 @@ app.get('/secured.html', authMiddleWare, function(req, res) {
     res.sendFile(__dirname + '/secured.html')
 })
 
-// Указываем из какой папки брать статические файлы, например стили или скрипты 
+app.get('/registration.html', function(req, res) {
+    res.sendFile(__dirname + '/registration.html')
+})
+
+// Indicate from which folder to take static files (css files or scripts)
 app.use(express.static('public'))
 
-// Запуск сервера который будет слушать запросы на 3000 порту
+// Running server on 3000 port that will listen to requests
 app.listen(3000, () => {
     console.log('Сервер запущен на порту 3000')
 })
