@@ -32,6 +32,16 @@ input {
     padding-left: 5px;
 }
 
+.hide_pass_element {
+    display: flex;
+    align-items: center;
+}
+
+#showpassword {
+    width: 12px;
+    margin-left: 4px;
+}
+
 body {
     background-color: var(--background);
 }
