@@ -28,14 +28,8 @@ function checkFields(login, password, req, res) {
         res.send(`<script>alert('Password must contain only English letters'); window.history.back()</script>`)
     } else if (/[а-яА-Я]/.test(login) == true) {
         res.send(`<script>alert('Login must contain only English letters'); window.history.back()</script>`)
-    } else if (pool.query('SELECT EXISTS (SELECT 1 FROM "UsersTable" WHERE username = $1) AS user_exists', [login], (err, result) => {
-        if (err) {
-            console.error('Error executing query:', err);
-        } else if (result.rows[0].user_exists == true) {
-            res.send(`<script>alert('This login alredy exists'); window.history.back()</script>`)
-        }
-    })) {
-    
+    } else if (pool.query('SELECT EXISTS (SELECT 1 FROM "UsersTable" WHERE username = $1)', [login])) {
+        res.send(`<script>alert('This login alredy exists'); window.history.back()</script>`)
     } else {
         pool.query('INSERT INTO "UsersTable" (username, password) VALUES ($1, $2)', [login, password], (err, result) => {
             if(err) {
@@ -49,7 +43,7 @@ function checkFields(login, password, req, res) {
 
 // function that checks login and password
 function checkUser(username, password) {
-    if (username === 'dhelfy' && password === 'pass1235') {
+    if (pool.query('SELECT EXISTS (SELECT * FROM "UsersTable" WHERE username = $1 AND password = $2) AS userfound', [username, password])) {
         return true
     } else {
         return false
