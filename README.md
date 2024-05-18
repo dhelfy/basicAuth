@@ -48,6 +48,8 @@ TABLESPACE pg_default;
 
 Now you are ready. Run a server with the website, open cmd, go to the directory with website and type this command:
 
+<strong><font color="red">Attention!</font></strong> Before starting the server you must change the values of credentials in DataBase.js to your locals.
+
 ```
 npm start
 ```
